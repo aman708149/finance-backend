@@ -14,6 +14,7 @@ import { PartnerModule } from './partner/partner.module';
 import { SignupModule } from './partner/signup/signup.module';
 import { InvestorModule } from './investor/investor.module';
 import { InvestmentsModule } from './investor/investments/investments.module';
+import { SharedModule } from './shared/shared.module';
 
 @Module({
   imports: [
@@ -38,6 +39,8 @@ import { InvestmentsModule } from './investor/investments/investments.module';
 
     // ✅ Add here
     InvestmentsModule,
+
+    SharedModule,
   ],
 
   controllers: [AppController],

@@ -38,7 +38,7 @@ export class InitializeAdminService {
 
     // 🔒 ONLY ONE SUPER ADMIN ALLOWED
     const superAdminExists = await this.userModel.exists({
-      role: Role.SUPER_ADMIN,
+      role: Role.ADMIN,
     });
 
     if (superAdminExists) {
@@ -118,7 +118,7 @@ export class InitializeAdminService {
 
     // 🔒 DOUBLE CHECK (race-condition safe)
     const superAdminExists = await this.userModel.exists({
-      role: Role.SUPER_ADMIN,
+      role: Role.ADMIN,
     });
 
     if (superAdminExists) {
@@ -137,7 +137,7 @@ export class InitializeAdminService {
           {
             userId,
             email,
-            role: Role.SUPER_ADMIN,
+            role: Role.ADMIN,
             ownerId: 'SYSTEM',
             rootAdminId: userId,
             status: UserStatus.Active,
@@ -152,7 +152,7 @@ export class InitializeAdminService {
           {
             userId,
             email,
-            role: Role.SUPER_ADMIN,
+            role: Role.ADMIN,
             ownerId: 'SYSTEM',
             rootAdminId: userId,
             status: UserStatus.Active,
