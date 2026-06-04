@@ -12,6 +12,7 @@ export class AdminService {
 
     async updateThemePreferences(userId: string, theme: string, res: any) {
         const userPreferences = await this.userPreferencesModel.findOneAndUpdate({ userId }, { theme }, { new: true, upsert: true });
+
         if (userPreferences) {
             await this.setCookiePreferences(res, userPreferences.theme);
             return userPreferences;
