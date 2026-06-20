@@ -18,6 +18,9 @@ export class UserProfile {
   @Prop({ required: true })
   role: Role;
 
+  @Prop({ default: false })
+  isVerified: boolean
+
   @Prop()
   fullName: string;
 

@@ -35,6 +35,7 @@ export class AuthService {
         userId: user.userId,
         role: user.role,
         email: user.email,
+        isVerified: user.isVerified,
         ownerId: user.ownerId,
         rootAdminId: user.rootAdminId
       };

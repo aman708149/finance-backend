@@ -3,6 +3,7 @@ import { Admin } from './admin.controller';
 import { AdminService } from './admin.service';
 import { AdminInitializeModule } from './admin-initialize/admin-initialize.module';
 import { InvestorModule } from './investor/investor.module';
+import { PartnerModule } from './partner/partner.module';
 
 @Module({
   controllers: [Admin],
@@ -11,6 +12,8 @@ import { InvestorModule } from './investor/investor.module';
   
   AdminInitializeModule,
   
-  InvestorModule]
+  InvestorModule,
+  
+  PartnerModule]
 })
 export class AdminModule { }

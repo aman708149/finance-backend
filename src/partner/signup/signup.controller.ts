@@ -1,9 +1,10 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { SignupService } from './signup.service';
+import { CreatePartnerOnboardingDto } from './dto/onboarding.dto';
 
 @Controller('signup')
 export class SignupController {
-  constructor(private readonly signupService: SignupService) {}
+  constructor(private readonly signupService: SignupService) { }
 
   @Post('send-otp')
   sendOtp(@Body('email') email: string) {
@@ -33,4 +34,12 @@ export class SignupController {
   resetPassword(@Body('email') email: string) {
     return this.signupService.resetPassword(email);
   }
+
+  @Post('partner-onboarding')
+  partnerOnboarding(
+    @Body() dto: CreatePartnerOnboardingDto,
+  ) {
+    return this.signupService.partnerOnboarding(dto);
+  }
+
 }

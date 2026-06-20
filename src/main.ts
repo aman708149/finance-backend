@@ -23,7 +23,11 @@ async function bootstrap() {
 
   // 🌐 Enable CORS
   app.enableCors({
-    origin: '*', // change in production
+    origin: [
+      'http://10.50.0.104:3003',
+      'http://localhost:3000',
+      'http://localhost:3003',
+    ],
     credentials: true,
   });
 

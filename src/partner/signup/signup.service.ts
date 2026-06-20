@@ -10,6 +10,8 @@ import { User } from 'src/common/schemas/user.schema';
 import { UserProfile } from 'src/common/schemas/userprofile.schema';
 import { Role } from 'src/common/enums/role.enum';
 import { FinanceMailQueueService } from 'src/queues/finance/finance-mail-queue.service';
+import { CreatePartnerOnboardingDto } from './dto/onboarding.dto';
+import { PartnerOnboarding, PartnerOnboardingDocument } from 'src/common/schemas/partner/partner-onboarding.schema';
 
 @Injectable()
 export class SignupService {
@@ -22,6 +24,9 @@ export class SignupService {
 
         @InjectModel(UserProfile.name)
         private userProfileModel: Model<UserProfile>,
+
+        @InjectModel(PartnerOnboarding.name)
+        private partnerOnboardingModel: Model<PartnerOnboardingDocument>,
 
         private readonly financeMailQueueService: FinanceMailQueueService,
 
@@ -170,5 +175,58 @@ export class SignupService {
         });
 
         return { message: 'New password sent to email' };
+    }
+
+    async partnerOnboarding(
+        dto: CreatePartnerOnboardingDto,
+    ) {
+        const user = await this.userModel.findOne({
+            email: dto.email,
+        });
+
+        if (!user) {
+            throw new BadRequestException('User not found, Fill Your Register Email Id');
+        }
+
+        const existing =
+            await this.partnerOnboardingModel.findOne({
+                userId: user.userId,
+            });
+
+        if (existing) {
+            throw new BadRequestException(
+                'Onboarding already completed',
+            );
+        }
+
+        await this.partnerOnboardingModel.create({
+            userId: user.userId,
+            ...dto,
+        });
+
+        await this.userModel.updateOne(
+            { userId: user.userId },
+            {
+                $set: {
+                    phone: dto.mobileNumber,
+                },
+            },
+        );
+
+        await this.userProfileModel.updateOne(
+            { userId: user.userId },
+            {
+                $set: {
+                    fullName: dto.fullName,
+                    isVerified: true,
+                },
+            },
+        );
+
+        return {
+            success: true,
+            message:
+                'Partner onboarding completed successfully',
+        };
     }
 }

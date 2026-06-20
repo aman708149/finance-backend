@@ -34,6 +34,9 @@ export class User {
   @Prop({ default: true })
   isActive: boolean;
 
+  @Prop({ default: false })
+  isVerified: boolean
+
   @Prop({ default: 'active' })
   status: string;
 }
