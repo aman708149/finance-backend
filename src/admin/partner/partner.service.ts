@@ -2,12 +2,19 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
 import { PartnerOnboarding, PartnerOnboardingDocument } from 'src/common/schemas/partner/partner-onboarding.schema';
+import { User, UserDocument } from 'src/common/schemas/user.schema';
+import { UserProfile } from 'src/common/schemas/userprofile.schema';
 
 @Injectable()
 export class PartnerService {
     constructor(
         @InjectModel(PartnerOnboarding.name)
         private readonly partnerOnboardingModel: Model<PartnerOnboardingDocument>,
+        @InjectModel(User.name)
+        private readonly userModel: Model<UserDocument>,
+
+        @InjectModel(UserProfile.name)
+        private readonly userProfileModel: Model<UserProfile>,
     ) { }
 
     async getAllOnboardings(
@@ -73,6 +80,41 @@ export class PartnerService {
             success: true,
             message: 'Onboarding updated successfully',
             data: onboarding,
+        };
+    }
+
+    async verifyPartner(userId: string) {
+
+        await this.partnerOnboardingModel.updateOne(
+            { userId },
+            {
+                $set: {
+                    isVerified: true,
+                },
+            },
+        );
+
+        await this.userModel.updateOne(
+            { userId },
+            {
+                $set: {
+                    isVerified: true,
+                },
+            },
+        );
+
+        await this.userProfileModel.updateOne(
+            { userId },
+            {
+                $set: {
+                    isVerified: true,
+                },
+            },
+        );
+
+        return {
+            success: true,
+            message: "Partner verified successfully",
         };
     }
 }

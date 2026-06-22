@@ -49,4 +49,13 @@ export class PartnerController {
             body,
         );
     }
+
+    @Post("verify/:userId")
+    verifyPartner(
+        @Param("userId") userId: string,
+    ) {
+        return this.partnerService.verifyPartner(
+            userId,
+        );
+    }
 }
