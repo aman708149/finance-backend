@@ -24,6 +24,7 @@ async function bootstrap() {
   // 🌐 Enable CORS
   app.enableCors({
     origin: [
+      'http://192.168.1.12:3003',
       'http://10.50.0.104:3003',
       'http://localhost:3000',
       'http://localhost:3003',

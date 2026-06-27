@@ -15,6 +15,7 @@ import { SignupModule } from './partner/signup/signup.module';
 import { InvestorModule } from './investor/investor.module';
 import { InvestmentsModule } from './investor/investments/investments.module';
 import { SharedModule } from './shared/shared.module';
+import { SocketModule } from './socket/socket.module';
 
 @Module({
   imports: [
@@ -41,6 +42,8 @@ import { SharedModule } from './shared/shared.module';
     InvestmentsModule,
 
     SharedModule,
+
+    SocketModule,
   ],
 
   controllers: [AppController],

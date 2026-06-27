@@ -44,6 +44,9 @@ export class PartnerOnboarding {
 
   @Prop()
   branchName: string;
+
+  @Prop({ default: false })
+  isVerified: boolean
 }
 
 export const PartnerOnboardingSchema =

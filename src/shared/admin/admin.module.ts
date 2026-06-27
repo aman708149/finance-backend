@@ -9,16 +9,29 @@ import {
   UserPreferencesSchema,
 } from 'src/common/schemas/userPreferences.schema';
 
+import {
+  Notification,
+  NotificationSchema,
+} from 'src/common/schemas/notification.schema';
+
+import { SocketModule } from 'src/socket/socket.module';
+
 @Module({
   imports: [
+    SocketModule, // <-- Add this
+
     MongooseModule.forFeature([
       {
         name: UserPreferences.name,
         schema: UserPreferencesSchema,
+      },
+      {
+        name: Notification.name,
+        schema: NotificationSchema,
       },
     ]),
   ],
   controllers: [AdminController],
   providers: [AdminService],
 })
-export class AdminModule {}
+export class AdminModule { }

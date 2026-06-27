@@ -1,12 +1,20 @@
 import { BadGatewayException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { Notification, NotificationDocument } from 'src/common/schemas/notification.schema';
 import { UserPreferences, UserPreferencesDocument } from 'src/common/schemas/userPreferences.schema';
+import { SocketGateway } from 'src/socket/socket.gateway';
 
 @Injectable()
 export class AdminService {
     constructor(
-        @InjectModel(UserPreferences.name) private userPreferencesModel: Model<UserPreferencesDocument>,
+        @InjectModel(UserPreferences.name)
+        private userPreferencesModel: Model<UserPreferencesDocument>,
+
+        @InjectModel(Notification.name)
+        private notificationModal: Model<NotificationDocument>,
+
+        private readonly socketGateway: SocketGateway,
     ) { }
 
 
@@ -31,5 +39,32 @@ export class AdminService {
             domain: process.env.NODE_ENV === 'development' ? undefined : process.env.COOKIE_DOMAIN,
             maxAge: 1000 * 60 * 60 * 24 * 365,
         });
+    }
+
+    async addNotification(body: any, adminId: string) {
+        try {
+
+            const notification = await this.notificationModal.create({
+                receiverId: body.receiverId,
+                title: body.title,
+                message: body.message,
+                isRead: false,
+                createdBy: adminId,
+            });
+
+            this.socketGateway.sendNotification(
+                body.receiverId,
+                notification,
+            );
+
+            return {
+                success: true,
+                message: 'Notification sent successfully.',
+                data: notification,
+            };
+
+        } catch (error) {
+            throw new BadGatewayException(error.message);
+        }
     }
 }
